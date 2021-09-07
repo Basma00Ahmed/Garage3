@@ -13,7 +13,7 @@ namespace Garage3.Data
             : base(options)
         {
         }
-
+        
         public DbSet<Garage3.Models.Entities.Member> Member { get; set; }
 
         public DbSet<Garage3.Models.Entities.Vehicle> Vehicle { get; set; }
