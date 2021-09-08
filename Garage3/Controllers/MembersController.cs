@@ -58,9 +58,18 @@ namespace Garage3.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(member);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool personalNoExists = _context.Member.Any(v => v.PersonalNo == member.PersonalNo);
+                if (!personalNoExists)
+                {    
+                     _context.Add(member);
+                     await _context.SaveChangesAsync();
+                    TempData["Message"] = $"{member.FirstName} {member.LastName} has been succssfully registered as Member";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("PersonalNo", "A member with this personal number alredy exists.");
+                }
             }
             return View(member);
         }
@@ -143,6 +152,16 @@ namespace Garage3.Controllers
             _context.Member.Remove(member);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult VerifyPersonalNo(string personalNo)
+        {
+            bool PersonalNoExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (PersonalNoExists)
+            {
+                return Json($"A Member with personl number {personalNo} already exists.");
+            }
+            return Json(true);
         }
 
         private bool MemberExists(int id)

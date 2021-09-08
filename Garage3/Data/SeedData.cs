@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Garage3.Models.Entities;
+using System.Text;
 
 namespace Garage3.Data
 {
     public class SeedData
     {
         private static Faker fake;
+        private static DateTime start = new DateTime(1940, 1, 1);
+        private static DateTime end = new DateTime(2003, 1, 1);
 
         internal static async Task InitAsync(IServiceProvider services)
         {
@@ -72,13 +75,14 @@ namespace Garage3.Data
            {
                 var fName = fake.Name.FirstName();
                 var lName = fake.Name.LastName();
-                var personalNo = fake.Name.FullName();
+                string fourDigit = new Random().Next(1000, 9999).ToString("D4");
+                string birthDay = String.Format("{0:yyyyMMdd}", GetBirthDay());    
 
                 var member = new Member
                 {
                     FirstName = fName,
                     LastName = lName,
-                    PersonalNo = personalNo
+                    PersonalNo = birthDay+"-"+fourDigit
                 };
 
                 members.Add(member);
@@ -93,7 +97,7 @@ namespace Garage3.Data
 
             for (int i = 0; i < 10; i++)
             {
-                var regNo = fake.Vehicle.Vin();
+                var regNo = GetRegNo();
                 var model = fake.Vehicle.Model();
                 
 
@@ -124,5 +128,33 @@ namespace Garage3.Data
                 new VehicleType {Type="Bicycle", Size=0.25 }
             };     
         }
+
+        private static DateTime GetBirthDay()
+        {
+            int range = (end - start).Days;
+            Random random = new Random();
+            return start.AddDays(random.Next(range));
+        }
+
+        private static string GetRegNo()
+        {
+            Random random = new Random();
+            var builder_char = new StringBuilder(3);
+            var builder_int = new StringBuilder(3);
+            for (int i = 0; i < 3; i++)
+            {
+                var c = (char)random.Next(65, 90);
+                builder_char.Append(c);
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                var x = random.Next(0, 9);
+                builder_int.Append(x);
+            }
+            return builder_char.ToString() + " " + builder_int.ToString();
+        }
+
     }
 }
+
+
