@@ -1,0 +1,44 @@
+﻿@model Garage3.Models.ViewModels.Members.MembersVehiclesViewModel
+
+@{
+    ViewData["Title"] = "MembersVehiclesDetails";
+}
+
+<h1>Member Details</h1>
+
+<div>
+
+    <hr />
+    <br />
+    <div class=" row container-fluid">
+        <div class="col-sm-6">
+            <strong class="text-primary">Name :</strong> @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)
+        </div>
+        <div class="col-sm-6">
+            <strong class="text-primary">@Html.DisplayNameFor(model => model.PersonalNo) :</strong> @Html.DisplayFor(model => model.PersonalNo)
+        </div>
+        <br />
+        <br />
+        <div class=" row input-group justify-content-center">
+            @foreach (var vehicle in Model.Vehicles)
+            {
+
+                <div class="card m-3 border-0" style="width: 20rem;">
+                    <a asp-controller="Vehicles" asp-action="VehicleDetails" asp-route-id="@vehicle.Id">
+                        <img class="card-img-top" src="~/images/VehicleIMG.png" alt="Card image">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary" style="text-align: center;">@vehicle.RegNo</h5>
+                        <p class="card-text text-center">
+                            @vehicle.Make - @vehicle.Model
+                        </p>
+                    </div>
+                </div> <br />
+
+            }
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Filter">Back to Members Search</a>
+</div>

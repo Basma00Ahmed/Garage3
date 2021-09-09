@@ -14,6 +14,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
+                <label asp-for="VehicleTypeId" class="control-label"></label>
+                <select asp-for="VehicleTypeId" class="form-control" asp-items="ViewBag.VehicleType">
+                    <option>  Select vehicle type</option>
+                </select>
+                <span asp-validation-for="VehicleTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="RegNo" class="control-label"></label>
                 <input asp-for="RegNo" class="form-control" />
                 <span asp-validation-for="RegNo" class="text-danger"></span>
@@ -38,20 +45,15 @@
                 <input asp-for="NoOfWheels" class="form-control" />
                 <span asp-validation-for="NoOfWheels" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check" hidden>
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsCheckedOut" /> @Html.DisplayNameFor(model => model.IsCheckedOut)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="ArrivalTime" class="control-label"></label>
                 <input asp-for="ArrivalTime" class="form-control" />
                 <span asp-validation-for="ArrivalTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeId" class="control-label"></label>
-                <input asp-for="TypeId" class="form-control" />
-                <span asp-validation-for="TypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MemberId" class="control-label"></label>

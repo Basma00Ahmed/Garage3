@@ -15,11 +15,14 @@ namespace Garage3.Data
 
         internal static async Task InitAsync(IServiceProvider services)
         {
-            using(var db = services.GetRequiredService<Garage3Context>())
+            using (var db = services.GetRequiredService<Garage3Context>())
             {
                 if (await db.Member.AnyAsync()) return;
 
                 fake = new Faker("sv");
+
+                var types = GetVehicleTypes();
+                await db.AddRangeAsync(types);
 
                 var Members = GetMembers();
                 await db.AddRangeAsync(Members);
@@ -28,7 +31,7 @@ namespace Garage3.Data
             }
         }
 
-  
+      
         private static List<Member> GetMembers()
         {
             var Members = new List<Member>();
@@ -41,23 +44,36 @@ namespace Garage3.Data
                 {
                     FirstName = fName,
                     LastName = lName,
-                    Vehicles = new List<Vehicle>{
-                                     new Vehicle
-                                    {
-                                        RegNo = fake.Vehicle.Vin(),
-                                        Make = fake.Vehicle.Manufacturer(),
-                                        Model = fake.Vehicle.Model(),
-                                        ArrivalTime=DateTime.Now,
-                                        NoOfWheels=4,
-                                        IsCheckedOut=false,
-                                        VehicleTypeId = 1
-                                     }
-                                                }
+                    Vehicles = new List<Vehicle>
+                    {
+                        new Vehicle
+                        {
+                            RegNo = fake.Vehicle.Vin(),
+                            Make = fake.Vehicle.Manufacturer(),
+                            Model = fake.Vehicle.Model(),
+                            ArrivalTime = DateTime.Now,
+                            NoOfWheels = 4,
+                            IsCheckedOut = false,
+                            VehicleTypeId = fake.Random.Int(0, 5)
+                        }
+                    }
                 };
-                Members.Add(Member);
             }
-
             return Members;
+
         }
+
+        private static List<VehicleType> GetVehicleTypes()
+        {
+            return new List<VehicleType>
+                    {
+                        new VehicleType {Type="Car", Size=1.0},
+                        new VehicleType {Type="Bus", Size=3.0 },
+                        new VehicleType {Type="MotorCycle", Size=0.33 },
+                        new VehicleType {Type="Truck", Size=4.0 },
+                        new VehicleType {Type="Bicycle", Size=0.25 }
+                    };
+        }
+
     }
 }

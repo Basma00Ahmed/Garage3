@@ -6,16 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Garage3.Data;
+using AutoMapper;
+using Bogus;
 using Garage3.Models.Entities;
+using Garage3.Models.ViewModels.Members;
+using System.Collections;
 
 namespace Garage3.Controllers
 {
     public class MembersController : Controller
     {
-        private readonly Garage3Context _context;
 
-        public MembersController(Garage3Context context)
+        private readonly IMapper mapper;
+        private readonly Garage3Context _context,db;
+
+        public MembersController(Garage3Context context, IMapper mapper)
         {
+            db = context;
+            this.mapper = mapper;
             _context = context;
         }
 
@@ -24,7 +32,39 @@ namespace Garage3.Controllers
         {
             return View(await _context.Member.ToListAsync());
         }
+        // GET: Members
+        public class CaseInsensitiveComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                return string.Compare(x, y, true);
+            }
+        }
 
+        public async Task<IActionResult> Filter(string PersonalNo,string FirstName,string LastName)
+        {
+            var m = db.Member
+                        .Where(member => (string.IsNullOrWhiteSpace(PersonalNo) || member.PersonalNo.Contains(PersonalNo)) &&
+                       (string.IsNullOrWhiteSpace(FirstName) || member.FirstName.StartsWith(FirstName)) &&
+                       (string.IsNullOrWhiteSpace(LastName) || member.LastName.StartsWith(LastName))) ;
+
+            var model = mapper.ProjectTo<MembersVehiclesViewModel>(m)
+                /*.OrderBy(m => m.FirstName.Substring(0, 2))*/;
+            var sortModel=await model.ToListAsync();
+        
+            return View(sortModel.OrderBy(m => m.FirstName.Substring(0, 2), StringComparer.Ordinal));
+        }
+        // GET: Members_Vehicles/Details/5
+        public async Task<IActionResult> MembersVehiclesDetails(int? id)
+        {
+            var member = await mapper.ProjectTo<MembersVehiclesViewModel>(db.Member)
+                                      .FirstOrDefaultAsync(m => m.Id == id);
+            if (member == null)
+            {
+                return NotFound();
+            }
+            return View(member);
+        }
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -149,5 +189,6 @@ namespace Garage3.Controllers
         {
             return _context.Member.Any(e => e.Id == id);
         }
+        
     }
 }

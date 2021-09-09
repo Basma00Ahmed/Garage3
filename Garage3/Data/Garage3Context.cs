@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Garage3.Models.Entities;
-
 namespace Garage3.Data
 {
     public class Garage3Context : DbContext
@@ -13,9 +12,10 @@ namespace Garage3.Data
             : base(options)
         {
         }
-
+        
         public DbSet<Garage3.Models.Entities.Member> Member { get; set; }
 
         public DbSet<Garage3.Models.Entities.Vehicle> Vehicle { get; set; }
+        public DbSet<Garage3.Models.Entities.VehicleType> VehicleType { get; set; }
     }
 }
