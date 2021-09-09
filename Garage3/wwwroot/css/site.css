@@ -69,3 +69,25 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+.vehicletype-input {
+    width: 100px;
+}
+
+.group-buttons-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -110px;
+    margin-left: -15px;
+}
+
+.group-buttons-label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    margin-left: .1em;
+    font-size:large;
+    background-color:aqua;
+}
+
+

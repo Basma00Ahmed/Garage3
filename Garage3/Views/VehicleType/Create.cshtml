@@ -12,20 +12,57 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
-                <span asp-validation-for="Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+            <section class="container">
+                <section class="row">
+                    <div class="form-group col-lg">
+                        <label asp-for="Type" class="control-label"></label>
+                        <input asp-for="Type" class="form-control vehicletype-input" />
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <section class="container">
+                        <section class="row group-buttons-row">
+                            <div class="form-group col-lg">
+                                <label asp-for="Size" class="control-label group-buttons-label">Spots needed</label>
+
+                                <div class="form-check-inline">
+                                    <label class="form-check-label ">
+                                        <input type="radio" class="form-check-input" value="0,20" name="size">0.25
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" value="0,33" name="size">0.33
+                                    </label>
+                                </div>
+                                <div class="form-check-inline disabled">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" value="1" name="size">1
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" value="2" name="size">2
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" value="3" name="size">3
+                                    </label>
+                                </div>
+                                <div class="form-check-inline disabled">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" value="4" name="size">4
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+                    </section>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+</form>
     </div>
 </div>
 
