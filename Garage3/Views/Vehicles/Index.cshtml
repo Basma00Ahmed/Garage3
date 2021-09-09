@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Garage3.Models.Entities.Vehicle>
+﻿@model IEnumerable<Garage_3._0.Models.Entities.Vehicle>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,37 +16,32 @@
                 @Html.DisplayNameFor(model => model.RegNo)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.VehicleType.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VehicleType.Size)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Make)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Model)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NoOfWheels)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsCheckedOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ArrivalTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.RegNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleType.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VehicleType.Size)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Make)
@@ -55,29 +50,11 @@
                 @Html.DisplayFor(modelItem => item.Model)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NoOfWheels)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCheckedOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ArrivalTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Member.Id)
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Garage3.Models.Entities.Member>
+﻿@model IEnumerable<Garage_3._0.Models.Entities.Member>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalNo)
+                @Html.DisplayNameFor(model => model.SocialSecurityNo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicles.Count)
             </th>
             <th></th>
         </tr>
@@ -28,13 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PersonalNo)
+                @Html.DisplayFor(modelItem => item.SocialSecurityNo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vehicles.Count)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Garage_3._0.Data;
+using Garage_3._0.Models.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Garage3.Data;
-using Garage3.Models.Entities;
 
-namespace Garage3.Controllers
+namespace Garage_3._0.Controllers
 {
     public class MembersController : Controller
     {
-        private readonly Garage3Context _context;
+        private readonly AppDbContext _context;
 
-        public MembersController(Garage3Context context)
+        public MembersController(AppDbContext context)
         {
             _context = context;
         }
@@ -22,25 +19,9 @@ namespace Garage3.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Member.ToListAsync());
-        }
+            var model = _context.Members.Include(m => m.Vehicles);
 
-        // GET: Members/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var member = await _context.Member
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (member == null)
-            {
-                return NotFound();
-            }
-
-            return View(member);
+            return View(await model.ToListAsync());
         }
 
         // GET: Members/Create
@@ -54,7 +35,7 @@ namespace Garage3.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PersonalNo,FirstName,LastName")] Member member)
+        public async Task<IActionResult> Create(Member member)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +54,7 @@ namespace Garage3.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Member.FindAsync(id);
+            var member = await _context.Members.FindAsync(id);
             if (member == null)
             {
                 return NotFound();
@@ -86,7 +67,7 @@ namespace Garage3.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,PersonalNo,FirstName,LastName")] Member member)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,SocialSecurityNo,FirstName,LastName")] Member member)
         {
             if (id != member.Id)
             {
@@ -124,7 +105,7 @@ namespace Garage3.Controllers
                 return NotFound();
             }
 
-            var member = await _context.Member
+            var member = await _context.Members
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (member == null)
             {
@@ -139,15 +120,15 @@ namespace Garage3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var member = await _context.Member.FindAsync(id);
-            _context.Member.Remove(member);
+            var member = await _context.Members.FindAsync(id);
+            _context.Members.Remove(member);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool MemberExists(int id)
         {
-            return _context.Member.Any(e => e.Id == id);
+            return _context.Members.Any(e => e.Id == id);
         }
     }
 }
