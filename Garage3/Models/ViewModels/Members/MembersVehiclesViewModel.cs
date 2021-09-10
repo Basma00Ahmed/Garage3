@@ -18,7 +18,7 @@ namespace Garage3.Models.ViewModels.Members
         public string LastName  { get; set; }
         [Display(Name = "Vehicles Count")]
         public int NoOfVehicles { get; set; }
-        public ICollection<Vehicle> Vehicles { get; set; }
+        public ICollection<Garage3.Models.Entities.Vehicle> Vehicles { get; set; }
 
     }
 }

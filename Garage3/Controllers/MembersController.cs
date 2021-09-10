@@ -30,8 +30,11 @@ namespace Garage3.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Member.ToListAsync());
+            var model = _context.Member.Include(m => m.Vehicles);
+
+            return View(await model.ToListAsync());
         }
+
         // GET: Members
         public class CaseInsensitiveComparer : IComparer<string>
         {
@@ -98,9 +101,19 @@ namespace Garage3.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(member);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                bool personalNoExists = _context.Member.Any(v => v.PersonalNo == member.PersonalNo);
+                if (!personalNoExists)
+                {
+                    _context.Add(member);
+                    await _context.SaveChangesAsync();
+                    TempData["Message"] = $"{member.FirstName} {member.LastName} has been succssfully registered as Member";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("PersonalNo", "A member with this personal number alredy exists.");
+                }
+
             }
             return View(member);
         }
@@ -184,7 +197,15 @@ namespace Garage3.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
+        public IActionResult VerifyPersonalNo(string personalNo)
+        {
+            bool PersonalNoExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (PersonalNoExists)
+            {
+                return Json($"A Member with personl number {personalNo} already exists.");
+            }
+            return Json(true);
+        }
         private bool MemberExists(int id)
         {
             return _context.Member.Any(e => e.Id == id);
