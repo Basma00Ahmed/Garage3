@@ -1,36 +1,40 @@
-﻿@model Garage3.Models.Entities.Member
+﻿@model Garage3.Models.ViewModels.Members.MembersVehiclesViewModel
 
-@{
-    ViewData["Title"] = "Details";
-}
+@{ ViewData["Title"] = "Details"; }
 
-<h1>Details</h1>
+<h1>Member Details</h1>
 
 <div>
-    <h4>Member</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PersonalNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PersonalNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-    </dl>
+    <br />
+    <div class=" row container-fluid">
+        <div class="col-sm-6">
+            <strong class="text-primary">Name :</strong> @Html.DisplayFor(model => model.FirstName) &nbsp; @Html.DisplayFor(model => model.LastName)
+        </div>
+        <div class="col-sm-6">
+            <strong class="text-primary">@Html.DisplayNameFor(model => model.PersonalNo) :</strong> @Html.DisplayFor(model => model.PersonalNo)
+        </div>
+        <br />
+        <br />
+        <div class=" row input-group justify-content-center">
+            @foreach (var vehicle in Model.Vehicles)
+            {
+                <div class="card m-3 border-0" style="width: 20rem;">
+                    <a asp-controller="Vehicles" asp-action="Details" asp-route-id="@vehicle.Id">
+                        <img class="card-img-top" src="~/images/VehicleIMG.png" alt="Card image">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary" style="text-align: center;">@vehicle.RegNo</h5>
+                        <p class="card-text text-center">
+                            @vehicle.Make - @vehicle.Model
+                        </p>
+                    </div>
+                </div>
+                <br />
+             }
+        </div>
+    </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Back to Members</a>
 </div>

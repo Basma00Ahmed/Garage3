@@ -1,0 +1,66 @@
+﻿@* Renders the validation partial which needs to be used on the form in this view.
+   Custom validation and messages is definied in Site.js *@
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<h1>Home</h1>
+
+<p class="lead">Welcome to the G1 Garage</p>
+
+<div class="row justify-content-center">
+    <div class="col-5 col-md-4 col-lg-3">
+        <a class="text-decoration-none text-primary" href="#licenseplate-collapse" data-toggle="collapse" role="button">
+            <div class="card text-center">
+                <div class="card-header text-uppercase bg-primary text-light">Check In / Register</div>
+                <div class="card-body">
+                    <span class="card-img d-block">
+                        <i class="fas fa-check fa-5x"></i>
+                    </span>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Go here to check in or register a vehicle.</small>
+                </div>
+            </div><!--end card-->
+        </a>
+    </div><!--end col-->
+
+    <div class="col-5 col-md-4 col-lg-3">
+        <a class="text-decoration-none text-info" asp-controller="Vehicles" asp-action="Index">
+            <div class="card text-center">
+                <div class="card-header text-uppercase bg-info text-light">Manage</div>
+                <div class="card-body">
+                    <span class="card-img d-block">
+                        <i class="fas fa-tools fa-5x"></i>
+                    </span>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Go here to manage an existing vehicle.</small>
+                </div>
+            </div><!--end card-->
+        </a>
+    </div><!--end col-->
+</div><!--end row-->
+
+<div class="row justify-content-center mt-3">
+    <div id="licenseplate-collapse" class="collapse col-10 col-md-8 col-lg-6">
+        <hr />
+        <p class="lead text-center">Please provide the license plate number for the vehicle and press [enter] to continue.</p>
+        <form id="licenseplateForm" asp-controller="Vehicles" asp-action="Home">
+            <div class="form-group">
+                <div class="licenseplate-container">
+                    <input type="text" name="regNo" id="regNo" class="form-control licenseplate" placeholder="ABC 123" maxlength="7">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="userMessage">
+        @if (TempData["UserMessage"] != null)
+        {
+            <hr />
+            <p class="text-warning text-center">@TempData["UserMessage"]</p>
+        }
+    </div>
+</div>

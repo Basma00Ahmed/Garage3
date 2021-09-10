@@ -1,0 +1,44 @@
+﻿@model Garage3.Models.Entities.Vehicle
+
+<div>
+    @if (TempData["UserMessage"] != null)
+    {
+        <p class="text-success text-center">@TempData["UserMessage"]</p>
+    }
+</div>
+
+<h1>Check In</h1>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                @Html.DisplayFor(model => model.RegNo)
+            </div>
+            <div class="card-body">
+                <h3 class="card-subtitle mb-2 text-muted">@Html.DisplayFor(model => model.VehicleTypeId)</h3>
+                <dl class="row">
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Make)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Make)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.Model)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.Model)
+                    </dd>
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.IsCheckedOut)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.IsCheckedOut)
+                    </dd>
+                </dl>
+                <a href="#" class="card-link">Check In</a>
+            </div>
+        </div>
+    </div>
+</div>

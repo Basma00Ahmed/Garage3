@@ -1,47 +1,80 @@
-﻿@model IEnumerable<Garage3.Models.Entities.Member>
+﻿@model IEnumerable<Garage3.Models.ViewModels.Members.MembersVehiclesViewModel>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
-<h1>Index</h1>
+<h1>Members</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonalNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonalNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<form asp-controller="Members" asp-action="Index" method="Get">
+    <div class=" row input-group mb-3">
+        <div class="col-md-3">
+            <input type="text" name="PersonalNo" class="form-control" placeholder="Search on Personal ID" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="FirstName" class="form-control" placeholder="Search on First Name" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="LastName" class="form-control" placeholder="Search on Last Name" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3 input-group-append">
+            <input type="submit" value="Filter" id="button-addon2" class="btn btn-secondary col-lg-12" />
+        </div>
+    </div>
+</form>
+
+<div class="row input-group">
+    <div class="container-fluid col-md-auto">
+        <table data-toggle="table"
+               data-classes="table table-hover table-condensed"
+               data-striped="true"
+               data-sort-order="desc"
+               data-pagination="true"
+               data-page-list="[10, 20,30, ALL]"
+               data-page-size="20">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="border-0  " data-sortable="true">
+                        @Html.DisplayNameFor(model => model.PersonalNo)
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th class="border-0 " data-sortable="true">
+                        @Html.DisplayNameFor(model => model.NoOfVehicles)
+                    </th>
+                    <th class="border-0"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PersonalNo)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoOfVehicles)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Garage3.Models.Entities
 {
@@ -10,7 +7,7 @@ namespace Garage3.Models.Entities
         public int Id { get; set; }
         public int Number { get; set; }
         public bool IsAvailable { get; set; }
-  
+
         public int GarageId { get; set; }
         public double Capacity { get; set; }
 

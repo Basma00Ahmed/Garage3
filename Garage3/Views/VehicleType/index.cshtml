@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Garage3.Models.Entities.VehicleType>
+
+@{
+    ViewData["Title"] = "index";
+}
+
+<h1>Vehicle Types</h1>
+@if (@TempData["Message"] != null)
+{
+    <div role="alert" class="alert alert-success alert-dismissible ">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> @TempData["Message"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Type)</th>
+            <th>@Html.DisplayNameFor(model => model.Size)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Size)</td>
+            </tr>
+        }
+    </tbody>
+</table>
