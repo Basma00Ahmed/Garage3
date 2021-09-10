@@ -164,6 +164,17 @@ namespace Garage3.Controllers
             return Json(true);
         }
 
+        
+        //public IActionResult VerifyNameconflict(string firstName,string lastName)
+        //{
+        //    bool PersonalNoExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+        //    if (PersonalNoExists)
+        //    {
+        //        return Json($"A Member with personl number {personalNo} already exists.");
+        //    }
+        //    return Json(true);
+        //}
+
         private bool MemberExists(int id)
         {
             return _context.Member.Any(e => e.Id == id);

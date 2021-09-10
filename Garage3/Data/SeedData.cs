@@ -82,6 +82,7 @@ namespace Garage3.Data
                 {
                     FirstName = fName,
                     LastName = lName,
+                    //SetLastName(lName),
                     PersonalNo = birthDay+"-"+fourDigit
                 };
 
