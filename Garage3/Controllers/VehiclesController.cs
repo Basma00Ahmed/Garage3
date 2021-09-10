@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Garage3.Data;
+using Garage3.Models;
+using Garage3.Models.Entities;
+using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,14 +17,16 @@ namespace Garage3.Views
     public class VehiclesController : Controller
     {
         private readonly Garage3Context _context;
+        private readonly IMapper _mapper;
 
-        public VehiclesController(Garage3Context context)
+        public VehiclesController(Garage3Context context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
         }
-        
-        // GET: Vehicles
-        public async Task<IActionResult> Index()
+
+
+        public async Task<IActionResult> Index(string RegNo, string drpVehicleType,string drpVehicleStatus)
         {
             var garage3Context = _context.Vehicle.Include(v => v.Member);
             return View(await garage3Context.ToListAsync());
@@ -32,22 +35,21 @@ namespace Garage3.Views
         public async Task<IActionResult> Filter(string RegNo,string drpVehicleType)
         {
             var VehicleTypesList = _context.VehicleType
-
-                                      .Select(e => new SelectListItem
-                                      {
-                                          Text = e.Type,
-                                          Value = e.Type
-                                      })
-                                      .Distinct()
-                                      .AsEnumerable();
-
+                                           .Select(e => new SelectListItem
+                                           {
+                                               Text = e.Type,
+                                               Value = e.Type
+                                           })
+                                           .Distinct()
+                                           .AsEnumerable();
             ViewBag.VehicleTypes = VehicleTypesList;
 
             var garage3Context = _context.Vehicle
                 .Include(v => v.Member)
                 .Include(v => v.VehicleType)
                 .Where(v => (string.IsNullOrWhiteSpace(RegNo) || v.RegNo.Contains(RegNo)) &&
-               (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType)));
+                (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType))&&
+                (string.IsNullOrWhiteSpace(drpVehicleStatus) || v.IsCheckedOut == bool.Parse(drpVehicleStatus)));
 
             return View(await garage3Context.ToListAsync());
         }
@@ -96,6 +98,7 @@ namespace Garage3.Views
             ViewData["VehicleType"] = new SelectList(_context.VehicleType, "Id", "Type"); 
 
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
+
             return View();
         }
 
@@ -104,10 +107,12 @@ namespace Garage3.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RegNo,Make,Model,Color,NoOfWheels,IsCheckedOut,ArrivalTime,VehicleTypeId,MemberId")] Vehicle vehicle)
+
+        public async Task<IActionResult> Registration(RegistrationViewModel vehicle)
         {
             if (ModelState.IsValid)
             {
+
                 bool regNoExists = _context.Vehicle.Any(v => v.RegNo == vehicle.RegNo);
                 if (!regNoExists)
                 {
@@ -117,9 +122,10 @@ namespace Garage3.Views
                     vehicle.Model = vehicle.Model.Substring(0, 1).ToUpper() + vehicle.Model.Substring(1);
                     vehicle.ArrivalTime = System.DateTime.Now;
                     vehicle.IsCheckedOut = false;
-                    _context.Add(vehicle);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                    //var student = _mapper.Map<Vehicle>(vehicle);
+                    _context.Add(_mapper.Map<Vehicle>(vehicle));
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 else
                 {
@@ -128,6 +134,25 @@ namespace Garage3.Views
             }
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", vehicle.MemberId);
             return View(vehicle);
+        }
+        public IActionResult VerifyPersonalNo(string personalNo)
+        {
+            bool PersonalNoNotExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (!PersonalNoNotExists)
+            {
+                return Json($"A Member with personl number {personalNo} Not Has a membership.");
+            }
+            return Json(true);
+        }
+
+        public IActionResult VerifyMemberAge(string personalNo)
+        {
+            bool PersonalNoNotExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (!PersonalNoNotExists)
+            {
+                return Json($"A Member with personl number {personalNo} Not Has a membership.");
+            }
+            return Json(true);
         }
 
         // GET: Vehicles/Edit/5
