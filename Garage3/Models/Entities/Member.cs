@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Garage3.Validation;
 
 namespace Garage3.Models.Entities
 {
@@ -13,6 +14,8 @@ namespace Garage3.Models.Entities
         public string PersonalNo { get; set; }
 
         public string FirstName { get; set; }
+
+        [CheckName]
         public string LastName { get; set; }
 
         public ICollection<Vehicle> Vehicles { get; set; }
