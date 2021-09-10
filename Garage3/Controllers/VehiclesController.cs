@@ -1,6 +1,8 @@
-﻿using Garage3.Data;
+﻿using AutoMapper;
+using Garage3.Data;
 using Garage3.Models;
 using Garage3.Models.Entities;
+using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +15,17 @@ namespace Garage3.Controllers
     public class VehiclesController : Controller
     {
         private readonly Garage3Context _context;
+        private readonly IMapper _mapper;
 
+        public VehiclesController(Garage3Context context, IMapper mapper)
         public VehiclesController(Garage3Context context)
         {
+            _mapper = mapper;
             _context = context;
         }
 
 
+        public async Task<IActionResult> Index(string RegNo, string drpVehicleType,string drpVehicleStatus)
         public async Task<IActionResult> Index(string RegNo, string drpVehicleType)
         {
             var VehicleTypesList = _context.VehicleType
@@ -37,15 +43,17 @@ namespace Garage3.Controllers
                 .Include(v => v.Member)
                 .Include(v => v.VehicleType)
                 .Where(v => (string.IsNullOrWhiteSpace(RegNo) || v.RegNo.Contains(RegNo)) &&
+                (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType))&&
+                (string.IsNullOrWhiteSpace(drpVehicleStatus) || v.IsCheckedOut == bool.Parse(drpVehicleStatus)));
                 (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType)));
 
             return View(await garage3Context.ToListAsync());
         }
 
         public IActionResult Home()
-        {
+            {
             return View();
-        }
+            }
 
         [HttpPost]
         public async Task<IActionResult> Home(string regNo)
@@ -64,15 +72,15 @@ namespace Garage3.Controllers
                 {
                     TempData["UserMessage"] = $"The vehicle with license plate number {regNo.ToUpper()} is already parked in the garage. Please try again.";
                     return View();
-                }
+            }
                 TempData["UserMessage"] = $"The vehicle with license plate number {regNo.ToUpper()} is already registrated and only need to check in.";
                 return RedirectToAction(nameof(CheckIn), new { id = regNo }) ;
-            }
+        }
         }
 
         public IActionResult Registration()
         {
-            ViewData["VehicleType"] = new SelectList(_context.VehicleType, "Id", "Type");
+            ViewData["VehicleType"] = new SelectList(_context.VehicleType, "Id", "Type"); 
 
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id");
             return View();
@@ -109,10 +117,14 @@ namespace Garage3.Controllers
         // CHECKIN VIEW NEEDS TO BE COMPLETE!!!
         [Route("Vehicles/CheckIn/{regNo}")] // Route need to be definied to work with a string as param at this point.
         public async Task<IActionResult> CheckIn(string regNo)
+        public IActionResult VerifyPersonalNo(string personalNo)
         {
             if (regNo == null)
+            bool PersonalNoNotExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (!PersonalNoNotExists)
             {
                 return NotFound();
+                return Json($"A Member with personl number {personalNo} Not Has a membership.");
             }
 
             var model = await _context.Vehicle
@@ -120,7 +132,7 @@ namespace Garage3.Controllers
             if (model == null)
             {
                 return NotFound();
-            }
+        }
 
             return View(model);
         }
@@ -146,7 +158,7 @@ namespace Garage3.Controllers
             }
 
             return View(vehicle);
-        }
+            }
 
         [HttpPost, ActionName("Leave")]
         [ValidateAntiForgeryToken]
@@ -170,7 +182,7 @@ namespace Garage3.Controllers
             {
                 return NotFound();
             }
-            ViewData["VehicleType"] = new SelectList(_context.VehicleType, "Id", "Type");
+             ViewData["VehicleType"] = new SelectList(_context.VehicleType, "Id", "Type");
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", vehicle.MemberId);
             return View(vehicle);
         }

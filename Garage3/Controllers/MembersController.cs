@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Garage3.Models.ViewModels.Members;
+using System.Collections;
 
 namespace Garage3.Controllers
 {
@@ -19,6 +21,8 @@ namespace Garage3.Controllers
 
         public MembersController(Garage3Context context, IMapper mapper)
         {
+            db = context;
+            this.mapper = mapper;
             _context = context;
             _mapper = mapper;
         }
@@ -64,19 +68,9 @@ namespace Garage3.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool personalNoExists = _context.Member.Any(v => v.PersonalNo == member.PersonalNo);
-                if (!personalNoExists)
-                {
-                    _context.Add(member);
-                    await _context.SaveChangesAsync();
-                    TempData["Message"] = $"{member.FirstName} {member.LastName} has been succssfully registered as Member";
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    ModelState.AddModelError("PersonalNo", "A member with this personal number alredy exists.");
-                }
-
+                _context.Add(member);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
             return View(member);
         }

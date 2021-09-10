@@ -3,16 +3,28 @@
 @{ ViewData["Title"] = "Index"; }
 
 <h1>Vehicles</h1>
-
+@if (@TempData["Message"] != null)
+{
+    <div role="alert" class="alert alert-success alert-dismissible ">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> @TempData["Message"]
+    </div>
+}
 <form asp-controller="Vehicles" asp-action="Index" method="Get">
     <div class=" row input-group mb-3">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <input type="text" name="RegNo" class="form-control" placeholder="Search on registration number" aria-describedby="button-addon2">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             @Html.DropDownList("drpVehicleType", new SelectList(ViewBag.VehicleTypes, "Value", "Text"), "Select Vehicle Type", new { @class = "form-control" })
         </div>
-        <div class="col-md-4 input-group-append">
+        <div class="col-md-3">
+            @Html.DropDownList("drpVehicleStatus", new List<SelectListItem>{
+                                                                               new SelectListItem{ Text="Check In", Value = "True" },
+                                                                               new SelectListItem{ Text="Check Out", Value = "False" } },
+                                                                               "Select Vehicle Status", new { @class = "form-control" })
+        </div>
+        <div class="col-md-3 input-group-append">
             <input type="submit" value="Filter" id="button-addon2" class="btn btn-secondary col-lg-12" />
         </div>
     </div>
@@ -44,7 +56,10 @@
                     <th class="border-0  " data-sortable="true">
                         Arrival Time
                     </th>
-                    <th class="border-0  " ></th>
+                    <th class="border-0  " data-sortable="true">
+                        Status
+                    </th>
+                    <th class="border-0  "></th>
                 </tr>
             </thead>
             <tbody>
@@ -71,13 +86,23 @@
                             @Html.DisplayFor(modelItem => item.ArrivalTime)
                         </td>
                         <td>
-                            <a asp-action="Update" asp-route-id="@item.Id">Update</a> | 
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> | 
-                            <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a> | 
+                            @if (item.IsCheckedOut == true)
+                            {
+                                <img src="~/images/CheckOut.png"/>
+                            }
+                            else
+                            {
+                                <img src="~/images/CheckIn.png" />
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="Update" asp-route-id="@item.Id">Update</a> |
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a> |
                             <a asp-action="Leave" asp-route-id="@item.Id">Leave</a>
                         </td>
                     </tr>
-                    }
+                }
             </tbody>
         </table>
     </div>

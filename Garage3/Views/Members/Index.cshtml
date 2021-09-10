@@ -3,6 +3,31 @@
 @{ ViewData["Title"] = "Index"; }
 
 <h1>Members</h1>
+@if (@TempData["Message"] != null)
+{
+    <div role="alert" class="alert alert-success alert-dismissible ">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> @TempData["Message"]
+    </div>
+}
+<form asp-controller="Members" asp-action="Index" method="Get">
+    <div class=" row input-group mb-3">
+        <div class="col-md-3">
+            <input type="text" name="PersonalNo" class="form-control" placeholder="Search on Personal ID" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="FirstName" class="form-control" placeholder="Search on First Name" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="LastName" class="form-control" placeholder="Search on Last Name" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-3 input-group-append">
+            <input type="submit" value="Filter" id="button-addon2" class="btn btn-secondary col-lg-12" />
+        </div>
+    </div>
+</form>
+
+<h1>Members</h1>
 
 <form asp-controller="Members" asp-action="Index" method="Get">
     <div class=" row input-group mb-3">
