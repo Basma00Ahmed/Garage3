@@ -19,4 +19,9 @@ $().ready(function () {
         }
     });
 
+    $('input#regNo').focus(function () {
+        $('div#userMessage').hide(); // Hides the div
+        $('div#userMessage > p').empty(); // Clears the user message
+    });
+
 });

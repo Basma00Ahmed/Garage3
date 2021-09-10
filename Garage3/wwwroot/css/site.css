@@ -11,6 +11,7 @@ html {
     box-sizing: inherit;
 }
 
+/* License Plate Form */
 .licenseplate-container {
     width: 100%;
     margin: 0 auto;
@@ -79,7 +80,42 @@ label.error {
     color: #d9534f;
     text-align: center;
 }
-/********************************************************************************/
+
+/* pagination styles */
+
+.fixed-table-pagination {
+    display: flex !important;
+}
+
+.pull-right pagination {
+    margin-left: auto !important;
+}
+
+div.pagination {
+    margin-left: auto !important;
+}
+/* Vehcile Type */
+.vehicletype-input {
+    width: 100px;
+}
+
+.group-buttons-row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -110px;
+    margin-left: -15px;
+}
+
+.group-buttons-label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    margin-left: .1em;
+    font-size: large;
+    background-color: aqua;
+}
+/*************************** END CUSTOM CSS *********************************/
 
 a.navbar-brand {
     white-space: normal;

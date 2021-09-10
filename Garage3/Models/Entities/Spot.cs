@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace Garage_3._0.Models.Entities
+namespace Garage3.Models.Entities
 {
     public class Spot
     {
         public int Id { get; set; }
-        public int ParkingNo { get; set; }
-        public double Capacity { get; set; } // 0-1
+        public int Number { get; set; }
+        public bool IsAvailable { get; set; }
 
-        // Navigation Property
+        public int GarageId { get; set; }
+        public double Capacity { get; set; }
+
+        public Garage Garage { get; set; }
+
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

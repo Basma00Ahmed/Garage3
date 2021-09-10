@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace Garage_3._0.Models.Entities
+namespace Garage3.Models.Entities
 {
     public class VehicleType
     {
         public int Id { get; set; }
+        [Required]
+        [Remote(action: "VerifyVehicleType", controller: "VehicleType")]
         public string Type { get; set; }
-        public double Size { get; set; } //0.33-3
+        [Required]
+        public double Size { get; set; }
 
-        // Navigation Property
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

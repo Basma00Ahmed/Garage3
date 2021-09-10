@@ -56,4 +56,11 @@
             </div>
         </form>
     </div>
+    <div id="userMessage">
+        @if (TempData["UserMessage"] != null)
+        {
+            <hr />
+            <p class="text-warning text-center">@TempData["UserMessage"]</p>
+        }
+    </div>
 </div>

@@ -1,8 +1,6 @@
-﻿@model Garage_3._0.Models.Entities.Member
+﻿@model Garage3.Models.Entities.Member
 
-@{
-    ViewData["Title"] = "Create";
-}
+@{ ViewData["Title"] = "Create"; }
 
 <h1>Create</h1>
 
@@ -13,9 +11,9 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="SocialSecurityNo" class="control-label"></label>
-                <input asp-for="SocialSecurityNo" class="form-control" />
-                <span asp-validation-for="SocialSecurityNo" class="text-danger"></span>
+                <label asp-for="PersonalNo" class="control-label"></label>
+                <input asp-for="PersonalNo" class="form-control" />
+                <span asp-validation-for="PersonalNo" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>

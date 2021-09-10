@@ -1,6 +1,6 @@
 using System;
 
-namespace Garage_3._0.Models
+namespace Garage3.Models
 {
     public class ErrorViewModel
     {

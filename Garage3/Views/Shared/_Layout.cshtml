@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Garage_3._0</title>
+    <title>@ViewData["Title"] - Garage3</title>
     <!-- Styles -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-table/bootstrap-table.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" /> <!-- Custom CSS -->
 </head>
@@ -31,10 +32,10 @@
                                 Admin
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" asp-controller="VehicleType" asp-action="Create">Create Vehicle Type</a>
+                                <a class="dropdown-item" asp-controller="VehicleType" asp-action="Index">View Vehicle Type</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" asp-controller="Members" asp-action="Create">Create Member</a>
                             </div>
                         </li>
                     </ul>
@@ -57,6 +58,7 @@
     <!-- JavaScripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script> <!-- Custom JS -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>

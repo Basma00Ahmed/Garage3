@@ -1,60 +1,84 @@
-﻿@model IEnumerable<Garage_3._0.Models.Entities.Vehicle>
+﻿@model IEnumerable<Garage3.Models.Entities.Vehicle>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@{ ViewData["Title"] = "Index"; }
 
-<h1>Index</h1>
+<h1>Vehicles</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.RegNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VehicleType.Type)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VehicleType.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Make)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.RegNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VehicleType.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Make)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<form asp-controller="Vehicles" asp-action="Index" method="Get">
+    <div class=" row input-group mb-3">
+        <div class="col-md-4">
+            <input type="text" name="RegNo" class="form-control" placeholder="Search on registration number" aria-describedby="button-addon2">
+        </div>
+        <div class="col-md-4">
+            @Html.DropDownList("drpVehicleType", new SelectList(ViewBag.VehicleTypes, "Value", "Text"), "Select Vehicle Type", new { @class = "form-control" })
+        </div>
+        <div class="col-md-4 input-group-append">
+            <input type="submit" value="Filter" id="button-addon2" class="btn btn-secondary col-lg-12" />
+        </div>
+    </div>
+</form>
+
+<div class="row input-group">
+    <div class="container-fluid col-md-auto">
+        <table data-toggle="table"
+               data-classes="table table-hover table-condensed"
+               data-striped="true"
+               data-sort-order="desc"
+               data-pagination="true"
+               data-page-list="[10, 20,30, ALL]"
+               data-page-size="20">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="border-0  " data-sortable="true">
+                        Owner
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        Membership
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        Vehicle Type
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        Registration Number
+                    </th>
+                    <th class="border-0  " data-sortable="true">
+                        Arrival Time
+                    </th>
+                    <th class="border-0  " ></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Members" asp-action="Details" asp-route-id="@item.MemberId">
+                                @Html.DisplayFor(modelItem => item.Member.FirstName) &nbsp; @Html.DisplayFor(modelItem => item.Member.LastName)
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MemberId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VehicleType.Type)
+                        </td>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">
+                                @Html.DisplayFor(modelItem => item.RegNo)
+                            </a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ArrivalTime)
+                        </td>
+                        <td>
+                            <a asp-action="Update" asp-route-id="@item.Id">Update</a> | 
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> | 
+                            <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a> | 
+                            <a asp-action="Leave" asp-route-id="@item.Id">Leave</a>
+                        </td>
+                    </tr>
+                    }
+            </tbody>
+        </table>
+    </div>
+</div>

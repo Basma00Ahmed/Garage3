@@ -1,4 +1,4 @@
-﻿@model Garage_3._0.Models.Entities.Vehicle
+﻿@model Garage3.Models.Entities.Vehicle
 
 <div>
     @if (TempData["UserMessage"] != null)
@@ -31,10 +31,10 @@
                         @Html.DisplayFor(model => model.Model)
                     </dd>
                     <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.IsParked)
+                        @Html.DisplayNameFor(model => model.IsCheckedOut)
                     </dt>
                     <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.IsParked)
+                        @Html.DisplayFor(model => model.IsCheckedOut)
                     </dd>
                 </dl>
                 <a href="#" class="card-link">Check In</a>
