@@ -6,6 +6,7 @@ using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,15 +19,12 @@ namespace Garage3.Controllers
         private readonly IMapper _mapper;
 
         public VehiclesController(Garage3Context context, IMapper mapper)
-        public VehiclesController(Garage3Context context)
         {
             _mapper = mapper;
             _context = context;
         }
 
-
         public async Task<IActionResult> Index(string RegNo, string drpVehicleType,string drpVehicleStatus)
-        public async Task<IActionResult> Index(string RegNo, string drpVehicleType)
         {
             var VehicleTypesList = _context.VehicleType
                                            .Select(e => new SelectListItem
@@ -43,9 +41,8 @@ namespace Garage3.Controllers
                 .Include(v => v.Member)
                 .Include(v => v.VehicleType)
                 .Where(v => (string.IsNullOrWhiteSpace(RegNo) || v.RegNo.Contains(RegNo)) &&
-                (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType))&&
+                (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType)) &&
                 (string.IsNullOrWhiteSpace(drpVehicleStatus) || v.IsCheckedOut == bool.Parse(drpVehicleStatus)));
-                (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType)));
 
             return View(await garage3Context.ToListAsync());
         }
@@ -88,10 +85,11 @@ namespace Garage3.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Registration([Bind("Id,RegNo,Make,Model,Color,NoOfWheels,IsCheckedOut,ArrivalTime,VehicleTypeId,MemberId")] Vehicle vehicle)
+        public async Task<IActionResult> Registration(RegistrationViewModel vehicle)
         {
             if (ModelState.IsValid)
             {
+
                 bool regNoExists = _context.Vehicle.Any(v => v.RegNo == vehicle.RegNo);
                 if (!regNoExists)
                 {
@@ -101,7 +99,8 @@ namespace Garage3.Controllers
                     vehicle.Model = vehicle.Model.Substring(0, 1).ToUpper() + vehicle.Model.Substring(1);
                     vehicle.ArrivalTime = System.DateTime.Now;
                     vehicle.IsCheckedOut = false;
-                    _context.Add(vehicle);
+                    //var student = _mapper.Map<Vehicle>(vehicle);
+                    _context.Add(_mapper.Map<Vehicle>(vehicle));
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -113,18 +112,34 @@ namespace Garage3.Controllers
             ViewData["MemberId"] = new SelectList(_context.Member, "Id", "Id", vehicle.MemberId);
             return View(vehicle);
         }
+        public IActionResult VerifyPersonalNo(string personalNo)
+        {
+            bool PersonalNoNotExists = _context.Member.Any(m => m.PersonalNo == personalNo);
+            if (!PersonalNoNotExists)
+            {
+                return Json($"A Member with personl number {personalNo} Not Has a membership.");
+            }
+            else
+            { 
+             var BirthDate = personalNo.Substring(0, 4) + "/" + personalNo.Substring(4, 2) + "/" + personalNo.Substring(6, 2);
+            var DiffInterval = DateTime.Now.Subtract(DateTime.Parse(BirthDate)).Days;
+            var Age = DiffInterval / 365;
+
+            if (Age < 18)
+            {
+                return Json($"A Member with personl number {personalNo} less than 18 years Not allowed to chek in.");
+            }
+            }
+            return Json(true);
+        }
 
         // CHECKIN VIEW NEEDS TO BE COMPLETE!!!
         [Route("Vehicles/CheckIn/{regNo}")] // Route need to be definied to work with a string as param at this point.
         public async Task<IActionResult> CheckIn(string regNo)
-        public IActionResult VerifyPersonalNo(string personalNo)
         {
             if (regNo == null)
-            bool PersonalNoNotExists = _context.Member.Any(m => m.PersonalNo == personalNo);
-            if (!PersonalNoNotExists)
             {
                 return NotFound();
-                return Json($"A Member with personl number {personalNo} Not Has a membership.");
             }
 
             var model = await _context.Vehicle
@@ -132,7 +147,7 @@ namespace Garage3.Controllers
             if (model == null)
             {
                 return NotFound();
-        }
+            }
 
             return View(model);
         }

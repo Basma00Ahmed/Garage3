@@ -21,8 +21,6 @@ namespace Garage3.Controllers
 
         public MembersController(Garage3Context context, IMapper mapper)
         {
-            db = context;
-            this.mapper = mapper;
             _context = context;
             _mapper = mapper;
         }
