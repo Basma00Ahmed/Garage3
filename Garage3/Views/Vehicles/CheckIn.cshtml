@@ -37,7 +37,7 @@
                         @Html.DisplayFor(model => model.IsCheckedOut)
                     </dd>
                 </dl>
-                <a href="#" class="card-link">Check In</a>
+                <a asp-controller="Parking" asp-action="ParkVehicle" asp-route-id="@Model.Id">Check In</a>
             </div>
         </div>
     </div>

@@ -8,11 +8,11 @@ namespace Garage3.Models.Entities
         public int Number { get; set; }
         public bool IsAvailable { get; set; }
 
-        public int GarageId { get; set; }
+        //public int GarageId { get; set; }
         public double Capacity { get; set; }
 
-        public Garage Garage { get; set; }
-
+        //public Garage Garage { get; set; }
+        public ICollection<Parking> Parkings { get; set; }
         public ICollection<Vehicle> Vehicles { get; set; }
     }
 }

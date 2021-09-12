@@ -48,6 +48,7 @@ namespace Garage3.Models.Entities
         public VehicleType VehicleType { get; set; }
         public Member Member { get; set; }
 
+        public ICollection<Parking> Parkings { get; set; }
         public ICollection<Spot> Spots { get; set; }
 
     }
