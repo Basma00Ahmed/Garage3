@@ -5,6 +5,7 @@ using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -126,9 +127,35 @@ namespace Garage3.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> CheckOut()
+        public async Task<IActionResult> CheckOut(int? id)
         {
-            return RedirectToAction("Index");
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var vehicle = await _context.Vehicle.FindAsync(id);
+            vehicle.IsCheckedOut = true;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(vehicle);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VehicleExists(vehicle.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Leave(int? id)
@@ -165,23 +192,12 @@ namespace Garage3.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LeaveConfirmed(int id)
         {
-            //var vehicle = await _context.Vehicle.FindAsync(id);
-            var vehicle = await _context.Vehicle
-                .Include(v => v.Member)
-                .Include(v => v.VehicleType)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            // This is a temp object to pass into the receipt view.
-            var tempVehicle = vehicle;
+            var vehicle = await _context.Vehicle.FindAsync(id);
             
             _context.Vehicle.Remove(vehicle);
             await _context.SaveChangesAsync();
 
-            TempData["tempVehicle"] = tempVehicle;
-
-            //return RedirectToAction("Index", "Receipt", new { id = id }); // Action, Controller, Temp object
-            return RedirectToAction("Index", "Receipt"); // Action, Controller, Temp object
-            //return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Receipt", vehicle); // Action, Controller, object
         }
 
         public async Task<IActionResult> Update(int? id)

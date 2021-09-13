@@ -19,32 +19,38 @@ namespace Garage3.Controllers
             _context = context;
         }
 
-        //[Route("Receipt/Index/{vehicle}")]
         [HttpGet]
         public async Task<IActionResult> Index(Vehicle vehicle)
         {
-            /*var vehicle = await _context.Vehicle
-                                .Include(v => v.Member)
-                                .Include(v => v.VehicleType)
-                                .FirstOrDefaultAsync(v => v.Id == id);*/
-
-            var tempVehicle = (Vehicle)TempData["tempVehicle"];
+            var member = await _context.Member.FindAsync(vehicle.MemberId);
+            var vehicleType = await _context.VehicleType.FindAsync(vehicle.VehicleTypeId);
 
             if (vehicle == null)
             {
                 return Content("Vehicle was null");
             }
 
-            var receipt = new ReceiptViewModel
+            ReceiptViewModel receipt = null;
+            if  (vehicle.IsCheckedOut == true)
             {
-                Id = vehicle.Id,
-                RegNo = vehicle.RegNo,
-                CustomerName = $"{vehicle.Member.FirstName} {vehicle.Member.LastName}",
-                VehicleType = vehicle.VehicleType.Type,
-                VehicleSize = vehicle.VehicleType.Size,
-                ArrivalTime = vehicle.ArrivalTime,
-                EndTime = DateTime.Now,
-            };
+                receipt = new ReceiptViewModel
+                {
+                    Id = vehicle.Id,
+                    RegNo = vehicle.RegNo,
+                    CustomerName = $"{member.FirstName} {member.LastName}",
+                    VehicleType = vehicleType.Type,
+                    VehicleSize = vehicleType.Size,
+                    ArrivalTime = vehicle.ArrivalTime,
+                    EndTime = DateTime.Now,
+                };
+            } 
+            else
+            {
+                receipt = new ReceiptViewModel
+                {
+                    RegNo = "none"
+                };
+            }
 
             return View(receipt);
         }

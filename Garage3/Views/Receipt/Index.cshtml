@@ -9,7 +9,7 @@
 <a class="btn btn-info" data-toggle="collapse" href="#receipt-collapse" role="button">
     Show Receipt
 </a> |
-<a asp-controller="ParkedVehicles" asp-action="Index">Back to the Garage</a>
+<a asp-controller="Vehicles" asp-action="Index">Back to the Garage</a>
 
 <div id="receipt-collapse" class="row justify-content-center collapse mt-3">
     <div class="col-7 col-md-6 col-lg-4 receipt-content border">
@@ -24,6 +24,22 @@
             <h3 class="receipt-headings">@Html.DisplayFor(model => model.RegNo)</h3>
         </div>
 
+        <div class="row">
+            <div class="col col-4">
+                <p>@Html.DisplayNameFor(model => model.CustomerName)</p>
+            </div><!--end col-->
+            <div class="col col-8">
+                <p class="text-right">@Html.DisplayFor(model => model.CustomerName)</p>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row">
+            <div class="col col-4">
+                <p>@Html.DisplayNameFor(model => model.VehicleType)</p>
+            </div><!--end col-->
+            <div class="col col-8">
+                <p class="text-right">@Html.DisplayFor(model => model.VehicleType)</p>
+            </div><!--end col-->
+        </div><!--end row-->
         <div class="row">
             <div class="col col-4">
                 <p>@Html.DisplayNameFor(model => model.ArrivalTime)</p>
@@ -47,8 +63,10 @@
             <div class="col col-7">
                 <p class="text-right">
                     @Html.DisplayFor(model => model.TotalTime)
-                    @if (Model.TotalTime < 2) { <span>Hr</span> }
-                    else { <span>Hrs</span> }
+                    @if (Model.TotalTime < 2)
+                    {<span>Hr</span> }
+                    else
+                    { <span>Hrs</span>}
                 </p>
             </div><!--end col-->
         </div><!--end row-->

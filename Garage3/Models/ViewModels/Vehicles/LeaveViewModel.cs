@@ -22,13 +22,5 @@ namespace Garage3.Models.ViewModels.Vehicles
 
         [Display(Name = "Owner")]
         public string MemberFullName { get; set; }
-
-        // FK
-        public int VehicleTypeId { get; set; }
-        public int MemberId { get; set; }
-
-        // Navigation Properties
-        public VehicleType VehicleType { get; set; }
-        public Member Member { get; set; }
     }
 }
