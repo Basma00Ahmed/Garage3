@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Garage3.Data;
 using Garage3.Models.Entities;
+using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,12 +14,25 @@ namespace Garage3.Controllers
     public class ParkingController : Controller
     {
         private readonly Garage3Context db;
+        private readonly IMapper _mapper;
         private readonly int GarageCapacity = 100;
 
-        public ParkingController(Garage3Context context)
+        public ParkingController(Garage3Context context, IMapper mapper)
         {
             db = context;
+            _mapper = mapper;
         }
+
+       /* public async Task<IActionResult> Index()
+        {
+            return View(await db.Parking.ToListAsync());
+        }
+
+        public IActionResult ParkVehicle()
+        {
+            return View();
+        }
+        */
         public async Task<IActionResult> ParkVehicle(int? id)
         {
             if (id == null)
@@ -26,6 +41,7 @@ namespace Garage3.Controllers
             }
 
             var vehicle = await db.Vehicle.FindAsync(id);
+            
             var vehicleType = await db.VehicleType.FindAsync(vehicle.VehicleTypeId);
             double size = vehicleType.Size;
             Spot spot;
@@ -109,6 +125,9 @@ namespace Garage3.Controllers
                 }
             }
             return View();
+            //var parkedVehicle = await _mapper.ProjectTo<CheckInViewModel>(db.Parking).FirstOrDefaultAsync(p => p. == vehicle.RegNo);
+            //return View(nameof(Index),parkedVehicle);
+           // return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> UnParkVehicle(int? id)

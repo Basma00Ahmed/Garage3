@@ -27,6 +27,7 @@ namespace Garage3.Data
                             p => p.HasOne(p => p.Vehicle).WithMany(v => v.Parkings),
                             p => p.HasOne(p => p.Spot).WithMany(s => s.Parkings));
         }
+        public DbSet<Garage3.Models.Entities.Parking> Parking { get; set; }
 
     }
 }
