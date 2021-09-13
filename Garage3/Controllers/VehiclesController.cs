@@ -162,9 +162,35 @@ namespace Garage3.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> CheckOut()
+        public async Task<IActionResult> CheckOut(int? id)
         {
-            return RedirectToAction("Index");
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var vehicle = await _context.Vehicle.FindAsync(id);
+            vehicle.IsCheckedOut = true;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(vehicle);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!VehicleExists(vehicle.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Leave(int? id)
@@ -176,23 +202,37 @@ namespace Garage3.Controllers
 
             var vehicle = await _context.Vehicle
                 .Include(v => v.Member)
+                .Include(v => v.VehicleType)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (vehicle == null)
             {
                 return NotFound();
             }
 
-            return View(vehicle);
-            }
+            var model = new LeaveViewModel
+            {
+                Id = vehicle.Id,
+                RegNo = vehicle.RegNo,
+                Type = vehicle.VehicleType.Type,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                ArrivalTime = vehicle.ArrivalTime,
+                MemberFullName = $"{vehicle.Member.FirstName} {vehicle.Member.LastName}"
+            };
+            return View(model);
+        }
 
         [HttpPost, ActionName("Leave")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LeaveConfirmed(int id)
         {
             var vehicle = await _context.Vehicle.FindAsync(id);
+
             _context.Vehicle.Remove(vehicle);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Receipt", vehicle); // Action, Controller, object
         }
 
         public async Task<IActionResult> Update(int? id)

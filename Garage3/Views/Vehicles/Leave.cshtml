@@ -1,4 +1,4 @@
-﻿@model Garage3.Models.Entities.Vehicle
+﻿@model Garage3.Models.ViewModels.Vehicles.LeaveViewModel
 
 @{
     ViewData["Title"] = "Leave";
@@ -6,10 +6,12 @@
 
 <h1>Leave</h1>
 
-<h3>Are you sure you want to Leave ?</h3>
+<h3>Are you sure that following @Html.DisplayFor(model => model.Type) is going to leave the parking permanentely?</h3>
+<h5 class="text-danger">NOTE: This will unregister the @Html.DisplayFor(model => model.Type) from the garage!</h5>
 <div>
-    <h4>Vehicle</h4>
     <hr />
+    <h5>Additional Information</h5>
+    <br />
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RegNo)
@@ -30,50 +32,22 @@
             @Html.DisplayFor(model => model.Model)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Color)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.NoOfWheels)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.NoOfWheels)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsCheckedOut)
-        </dt>
-        <dd class="col-sm-10">
-            @if (Model.IsCheckedOut == true)
-            {
-                <img src="~/images/CheckOut.png" />
-            }
-            else
-            {
-                <img src="~/images/CheckIn.png" />
-            }
-        </dd>
-        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ArrivalTime)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ArrivalTime)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VehicleType.Type)
+            @Html.DisplayNameFor(model => model.MemberFullName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VehicleType.Type)
+            @Html.DisplayFor(model => model.MemberFullName)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Member.FirstName)
-        </dt>
     </dl>
-    
+
     <form asp-action="Leave">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Leave" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to Vehicles</a>
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

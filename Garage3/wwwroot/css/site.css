@@ -115,6 +115,32 @@ div.pagination {
     font-size: large;
     background-color: aqua;
 }
+
+
+/* Receipt View */
+.receipt-content p {
+    font-family: "Courier New", "Lucida Console", monospace;
+}
+
+.receipt-headings {
+    font-family: "Monaco", "Lucida Console", monospace;
+}
+
+.receipt-barcode {
+    background-image: url("../images/receipt-barcode.png");
+    background-position: center center;
+    background-repeat: repeat-x;
+    height: 50px;
+}
+
+.border-y-dotted {
+    border-top: 1px dashed;
+    border-bottom: 1px dashed;
+}
+
+.border-t-dotted {
+    border-top: 1px dashed;
+}
 /*************************** END CUSTOM CSS *********************************/
 
 a.navbar-brand {
