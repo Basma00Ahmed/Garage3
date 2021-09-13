@@ -93,6 +93,8 @@ namespace Garage3.Controllers
                 bool regNoExists = _context.Vehicle.Any(v => v.RegNo == vehicle.RegNo);
                 if (!regNoExists)
                 {
+                    var member = _context.Member.FirstOrDefault(M => M.PersonalNo == vehicle.PersonalNo);
+                    vehicle.MemberId = member.Id;
                     vehicle.RegNo = vehicle.RegNo.ToUpper();
                     vehicle.Color = vehicle.Color.Substring(0, 1).ToUpper() + vehicle.Color.Substring(1);
                     vehicle.Make = vehicle.Make.Substring(0, 1).ToUpper() + vehicle.Make.Substring(1);
