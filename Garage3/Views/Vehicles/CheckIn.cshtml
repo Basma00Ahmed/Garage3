@@ -31,13 +31,20 @@
                         @Html.DisplayFor(model => model.Model)
                     </dd>
                     <dt class="col-sm-4">
-                        @Html.DisplayNameFor(model => model.IsCheckedOut)
+                        @if (Model.IsCheckedOut == true)
+                        {
+                            <img src="~/images/CheckOut.png" />
+                        }
+                        else
+                        {
+                            <img src="~/images/CheckIn.png" />
+                        }
                     </dt>
                     <dd class="col-sm-8">
                         @Html.DisplayFor(model => model.IsCheckedOut)
                     </dd>
                 </dl>
-                <a href="#" class="card-link">Check In</a>
+                <a href="Index" class="card-link">Check In</a>
             </div>
         </div>
     </div>
