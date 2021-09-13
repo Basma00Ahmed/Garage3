@@ -1,6 +1,7 @@
 ﻿using Garage3.Data;
 using Garage3.Models;
 using Garage3.Models.Entities;
+using Garage3.Models.ViewModels.Vehicles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -139,23 +140,48 @@ namespace Garage3.Controllers
 
             var vehicle = await _context.Vehicle
                 .Include(v => v.Member)
+                .Include(v => v.VehicleType)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (vehicle == null)
             {
                 return NotFound();
             }
 
-            return View(vehicle);
+            var model = new LeaveViewModel
+            {
+                Id = vehicle.Id,
+                RegNo = vehicle.RegNo,
+                Type = vehicle.VehicleType.Type,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                ArrivalTime = vehicle.ArrivalTime,
+                MemberFullName = $"{vehicle.Member.FirstName} {vehicle.Member.LastName}"
+            };
+            return View(model);
         }
 
         [HttpPost, ActionName("Leave")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LeaveConfirmed(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            //var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicle
+                .Include(v => v.Member)
+                .Include(v => v.VehicleType)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            // This is a temp object to pass into the receipt view.
+            var tempVehicle = vehicle;
+            
             _context.Vehicle.Remove(vehicle);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            TempData["tempVehicle"] = tempVehicle;
+
+            //return RedirectToAction("Index", "Receipt", new { id = id }); // Action, Controller, Temp object
+            return RedirectToAction("Index", "Receipt"); // Action, Controller, Temp object
+            //return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Update(int? id)

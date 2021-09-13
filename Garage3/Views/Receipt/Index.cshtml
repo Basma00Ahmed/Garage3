@@ -1,0 +1,74 @@
+﻿@model Garage3.Models.ViewModels.ReceiptVM.ReceiptViewModel
+
+<h1>Confirmation</h1>
+
+<hr />
+<h5 class="text-success">The @Html.DisplayFor(model => model.VehicleType) with registration number @Html.DisplayFor(model => model.RegNo) was successfully checked out at @Html.DisplayFor(model => model.EndTime).</h5>
+<br />
+<br />
+<a class="btn btn-info" data-toggle="collapse" href="#receipt-collapse" role="button">
+    Show Receipt
+</a> |
+<a asp-controller="ParkedVehicles" asp-action="Index">Back to the Garage</a>
+
+<div id="receipt-collapse" class="row justify-content-center collapse mt-3">
+    <div class="col-7 col-md-6 col-lg-4 receipt-content border">
+        <div class="text-center">
+            <img src="~/images/parking-ticket-icon.png" alt="parking ticket" />
+        </div>
+        <div class="text-center border-y-dotted pt-3">
+            <p class="lead">PARKING RECEIPT</p>
+        </div>
+        <div class="text-center pt-3">
+            <small>@Html.DisplayNameFor(model => model.RegNo)</small>
+            <h3 class="receipt-headings">@Html.DisplayFor(model => model.RegNo)</h3>
+        </div>
+
+        <div class="row">
+            <div class="col col-4">
+                <p>@Html.DisplayNameFor(model => model.ArrivalTime)</p>
+            </div><!--end col-->
+            <div class="col col-8">
+                <p class="text-right">@Html.DisplayFor(model => model.ArrivalTime)</p>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row">
+            <div class="col col-4">
+                <p>@Html.DisplayNameFor(model => model.EndTime)</p>
+            </div><!--end col-->
+            <div class="col col-8">
+                <p class="text-right">@Html.DisplayFor(model => model.EndTime)</p>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row">
+            <div class="col col-5">
+                <p>@Html.DisplayNameFor(model => model.TotalTime)</p>
+            </div><!--end col-->
+            <div class="col col-7">
+                <p class="text-right">
+                    @Html.DisplayFor(model => model.TotalTime)
+                    @if (Model.TotalTime < 2) { <span>Hr</span> }
+                    else { <span>Hrs</span> }
+                </p>
+            </div><!--end col-->
+        </div><!--end row-->
+        <div class="row">
+            <div class="col col-5">
+                <p>@Html.DisplayNameFor(model => model.HourlyRate)</p>
+            </div><!--end col-->
+            <div class="col col-7">
+                <p class="text-right">@Html.DisplayFor(model => model.HourlyRate) SEK</p>
+            </div><!--end col-->
+        </div><!--end row-->
+
+        <div class="text-center">
+            <small>@Html.DisplayNameFor(model => model.TotalCost)</small>
+            <h5 class="receipt-headings">@Html.DisplayFor(model => model.TotalCost) SEK</h5>
+        </div>
+
+        <div class="text-center border-t-dotted py-3">
+            <p><small>Thank you and drive safely!</small></p>
+            <div class="receipt-barcode"></div>
+        </div>
+    </div><!--end col-->
+</div><!--end row-->
