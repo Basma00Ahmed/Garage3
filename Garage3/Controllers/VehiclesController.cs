@@ -170,12 +170,17 @@ namespace Garage3.Controllers
             }
             var vehicle = await _context.Vehicle.FindAsync(id);
             vehicle.IsCheckedOut = true;
+             await _context.SaveChangesAsync();
 
             if (ModelState.IsValid)
             {
                 try
                 {
                     _context.Update(vehicle);
+                   
+                    var parking = await _context.Parking.Where(v => v.VehicleId == vehicle.Id).ToListAsync();
+                    for (int i = 0; i < parking.Count; i++)
+                    { _context.Parking.Remove(parking[i]); } 
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

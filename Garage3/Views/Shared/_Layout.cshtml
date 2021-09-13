@@ -26,18 +26,20 @@
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" asp-controller="Vehicles" asp-action="Index" id="navbarDropdownVehicle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle"  id="navbarDropdownVehicle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Vehicles
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownVehicle">
+                                <a class="dropdown-item" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
                                 <a class="dropdown-item" asp-controller="Vehicles" asp-action="Registration">Check In Vehicle</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" asp-controller="Members" asp-action="Index" id="navbarDropdownMember" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle"  id="navbarDropdownMember" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Members
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMember">
+                                <a class="dropdown-item" asp-controller="Members" asp-action="Index">Members</a>
                                 <a class="dropdown-item" asp-controller="Members" asp-action="Create">Member Registration</a>
                             </div>
                         </li>
