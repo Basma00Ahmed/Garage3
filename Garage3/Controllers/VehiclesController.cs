@@ -42,8 +42,12 @@ namespace Garage3.Controllers
                 .Include(v => v.VehicleType)
                 .Where(v => (string.IsNullOrWhiteSpace(RegNo) || v.RegNo.Contains(RegNo)) &&
                 (string.IsNullOrWhiteSpace(drpVehicleType) || v.VehicleType.Type.StartsWith(drpVehicleType)) &&
-                (string.IsNullOrWhiteSpace(drpVehicleStatus) || v.IsCheckedOut == bool.Parse(drpVehicleStatus)));
-
+                (string.IsNullOrWhiteSpace(drpVehicleStatus) || v.IsCheckedOut == bool.Parse(drpVehicleStatus)))
+                .OrderByDescending(v=>v.ArrivalTime);
+            if (garage3Context == null)
+            {
+                return NotFound();
+            }
             return View(await garage3Context.ToListAsync());
         }
 
@@ -100,10 +104,14 @@ namespace Garage3.Controllers
                     vehicle.Make = vehicle.Make.Substring(0, 1).ToUpper() + vehicle.Make.Substring(1);
                     vehicle.Model = vehicle.Model.Substring(0, 1).ToUpper() + vehicle.Model.Substring(1);
                     vehicle.ArrivalTime = System.DateTime.Now;
-                    vehicle.IsCheckedOut = false;
-                    //var student = _mapper.Map<Vehicle>(vehicle);
-                    _context.Add(_mapper.Map<Vehicle>(vehicle));
+                    vehicle.IsCheckedOut = true;
+                    var CurrentVehicle= _context.Add(_mapper.Map<Vehicle>(vehicle));
                     await _context.SaveChangesAsync();
+
+                    //////Check In 
+                    ParkingController parkingController = new ParkingController(_context);
+                    await parkingController.ParkVehicle(CurrentVehicle.Entity.Id);
+
                     return RedirectToAction(nameof(Index));
                 }
                 else

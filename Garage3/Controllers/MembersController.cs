@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Garage3.Models.ViewModels.Members;
-using System.Collections;
 
 namespace Garage3.Controllers
 {
@@ -27,13 +25,16 @@ namespace Garage3.Controllers
 
         public async Task<IActionResult> Index(string PersonalNo, string FirstName, string LastName)
         {
-            var m = _context.Member
+            var member = _context.Member
                        .Where(member => (string.IsNullOrWhiteSpace(PersonalNo) || member.PersonalNo.Contains(PersonalNo)) &&
                       (string.IsNullOrWhiteSpace(FirstName) || member.FirstName.StartsWith(FirstName)) &&
                       (string.IsNullOrWhiteSpace(LastName) || member.LastName.StartsWith(LastName)));
 
-            var model = _mapper.ProjectTo<MembersVehiclesViewModel>(m);
-
+            var model = _mapper.ProjectTo<MembersVehiclesViewModel>(member);
+            if (model == null)
+            {
+                return NotFound();
+            }
             var sortModel = await model.ToListAsync();
 
             return View(sortModel.OrderBy(m => m.FirstName.Substring(0, 2), StringComparer.Ordinal));

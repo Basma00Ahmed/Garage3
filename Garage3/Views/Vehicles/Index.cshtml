@@ -87,20 +87,30 @@
                             @Html.DisplayFor(modelItem => item.ArrivalTime)
                         </td>
                         <td>
-                            @if (item.IsCheckedOut == true)
+                            @if (item.IsCheckedOut == false)
                             {
-                                <img src="~/images/CheckOut.png"/>
+                                <img src="~/images/CheckOut.png" />
                             }
                             else
                             {
                                 <img src="~/images/CheckIn.png" />
+
                             }
                         </td>
                         <td>
                             <a asp-action="Update" asp-route-id="@item.Id">Update</a> |
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a> |
-                            <a asp-action="Leave" asp-route-id="@item.Id">Leave</a>
+                            @if (item.IsCheckedOut == false)
+                            {
+                                <a asp-action="CheckOut" asp-route-id="@item.Id">Check Out</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Parking" asp-action="ParkVehicle" asp-route-id="@item.Id">Check In</a>
+                            }
+                            |
+                            <a asp-action="Leave" asp-route-id="@item.Id"> Leave </a>
+
                         </td>
                     </tr>
                 }

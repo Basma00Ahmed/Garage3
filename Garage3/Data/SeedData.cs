@@ -33,6 +33,10 @@ namespace Garage3.Data
 
                 var vehicles = GetVehicles();
                 await db.AddRangeAsync(vehicles);
+                await db.SaveChangesAsync();
+
+                var spots = GetSpots();
+                await db.AddRangeAsync(spots);
 
                 await db.SaveChangesAsync();
             }
@@ -125,6 +129,22 @@ namespace Garage3.Data
                 builder_int.Append(x);
             }
             return builder_char.ToString() + " " + builder_int.ToString();
+        }
+
+        private static List<Spot> GetSpots()
+        {
+            var spots = new List<Spot>();
+            for (int i = 1; i <= 100; i++)
+            {
+                var spot = new Spot
+                {
+                    Number = i,
+                    IsAvailable = true,
+                    Capacity = 1
+                };
+                spots.Add(spot);
+            }
+            return spots;
         }
 
     }

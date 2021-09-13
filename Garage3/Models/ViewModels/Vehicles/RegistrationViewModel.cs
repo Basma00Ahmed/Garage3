@@ -57,5 +57,6 @@ namespace Garage3.Models.ViewModels.Vehicles
         public Member Member { get; set; }
 
         public ICollection<Spot> Spots { get; set; }
+        public ICollection<Parking> Parkings { get; set; }
     }
 }

@@ -31,20 +31,21 @@
                         @Html.DisplayFor(model => model.Model)
                     </dd>
                     <dt class="col-sm-4">
-                        @if (Model.IsCheckedOut == true)
-                        {
-                            <img src="~/images/CheckOut.png" />
-                        }
-                        else
+                        @Html.DisplayNameFor(model => model.IsCheckedOut)
+                    </dt>
+                    <dd class="col-sm-8">
+                        @if (Model.IsCheckedOut == false)
                         {
                             <img src="~/images/CheckIn.png" />
                         }
-                    </dt>
-                    <dd class="col-sm-8">
-                        @Html.DisplayFor(model => model.IsCheckedOut)
+                        else
+                        {
+                            <img src="~/images/CheckOut.png" />
+                        }
+
                     </dd>
                 </dl>
-                <a href="Index" class="card-link">Check In</a>
+                <a class="card-link" asp-controller="Parking" asp-action="ParkVehicle" asp-route-id="@Model.Id">Check In</a>
             </div>
         </div>
     </div>
